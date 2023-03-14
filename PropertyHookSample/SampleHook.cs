@@ -3,8 +3,23 @@ using System;
 
 namespace PropertyHookSample
 {
-    public class SampleHook : PHook
+    public class SampleHookPTDE : PHook
     {
+        private PHPointer WorldChrBase;
+        private PHPointer CharData1;
+        private PHPointer ChrData2;
+        private PHPointer AiTimer;
+
+        public SampleHookPTDE() : base(5000, 5000, p => p.ProcessName == "DARKSOULS")
+        {
+            AiTimer = RegisterAbsoluteAOB(DSOffsets.AiTimerAOB, DSOffsets.AiTimerOffset1, DSOffsets.AiTimerOffset2);
+        }
+
+        public float AiTimerValue => AiTimer.ReadSingle(DSOffsets.AiTimerOffset3);
+    }
+
+    public class SampleHookDSR : PHook
+    { 
         private PHPointer WorldChrBase;
         private PHPointer ChrData1;
         private PHPointer ChrData2;
@@ -14,7 +29,7 @@ namespace PropertyHookSample
         public const int AiTimerOffset1 = 0;
         public const int AiTimerOffset2 = 0x24;
 
-        public SampleHook() : base(5000, 5000, p => p.ProcessName == "DarkSoulsRemastered")
+        public SampleHookDSR() : base(5000, 5000, p => p.ProcessName == "DarkSoulsRemastered")
         {
             WorldChrBase = CreateBasePointer((IntPtr)0x141D151B0, 0);
             ChrData1 = CreateChildPointer(WorldChrBase, 0x68);

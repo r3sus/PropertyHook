@@ -7,25 +7,41 @@ namespace PropertyHookSample
     {
         static void Main(string[] args)
         {
-            SampleHook hook = new SampleHook();
-            hook.Start();
-
-            var rand = new Random();
+            
+            var hookDSR = new SampleHookDSR();
+            hookDSR.Start();
+            
+            var hookPTDE = new SampleHookPTDE();
+            hookPTDE.Start();
+            
             while (!Console.KeyAvailable)
             {
-                Console.WriteLine($"AiTimer: {hook.AiTimerValue:0.000}");
+                var ms = 100;
+                float ait = 0;
+                if (hookDSR.Hooked)
+                {
+                    ait = hookDSR.AiTimerValue;
+                    ms = 16;
+                }
+                if (hookPTDE.Hooked)
+                {
+                    ait = hookPTDE.AiTimerValue;
+                    ms = 32;
+                }
+                //Console.WriteLine($"Handle:\n DSR: {hookDSR.Handle:0.000}\n PTDE: {hookPTDE.Handle}");
+                Console.WriteLine($"AiTimer: {hookPTDE}");
                 /*
                 if (hook.Health < 200)
                     hook.Health += 200;
                 */
-                var s1 = rand.Next(100);
-                Thread.Sleep(s1);
+                Thread.Sleep(ms);
 
                 Console.Clear();
             }
 
             // Not strictly necessary; the hooking thread is a background thread, so it will exit automatically
-            hook.Stop();
+            hookDSR.Stop();
+            hookPTDE.Stop();
         }
     }
 }
