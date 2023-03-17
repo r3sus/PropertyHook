@@ -16,24 +16,26 @@ namespace PropertyHookSample
             
             while (!Console.KeyAvailable)
             {
-                var ms = 100;
+                int fps = 1;
                 float ait = 0;
                 if (hookDSR.Hooked)
                 {
                     ait = hookDSR.AiTimerValue;
-                    ms = 16;
+                    fps = 30;
                 }
                 if (hookPTDE.Hooked)
                 {
                     ait = hookPTDE.AiTimerValue;
-                    ms = 32;
+                    fps = 60;
                 }
                 //Console.WriteLine($"Handle:\n DSR: {hookDSR.Handle:0.000}\n PTDE: {hookPTDE.Handle}");
-                Console.WriteLine($"AiTimer: {hookPTDE}");
+                Console.WriteLine($"AiTimer: {ait}");
                 /*
                 if (hook.Health < 200)
                     hook.Health += 200;
                 */
+                int ms = (int) (1.0 / fps * 1000);
+                ms /= 5;
                 Thread.Sleep(ms);
 
                 Console.Clear();
